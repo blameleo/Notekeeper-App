@@ -1,23 +1,46 @@
 import React from "react";
-import Header from './Header.jsx'
-import Footer from './Footer.jsx'
-import Note from './Note.jsx'
-import notes from "./notes.js"
+import Header from "./Header.jsx";
+import Footer from "./Footer.jsx";
 
-export default function App () {
-    return (
-        <div>
-        <Header />
-        <Footer />
-        <Note title={notes[0].title} content={notes[0].content}/> 
-        <Note title={notes[1].title} content={notes[1].content}/> 
-        <Note title={notes[2].title} content={notes[2].content}/> 
-        <Note title={notes[3].title} content={notes[3].content}/> 
+import InputNote from "./InputNote.js";
+import { useState } from "react";
+import Note from "./Note.jsx";
 
 
 
-        </div>
-    )
+export default function App() {
+
+  const [lists,setLists] = useState([])
+
+  function add(inputText,setInputText){
+setLists((prev)=>{
+  return [...prev,inputText]
+})
+setInputText({
+  title: "",
+  body: ""
+})
+  }
+
+  function handleDel(id) {
+    setLists((prev)=>{
+      return prev.filter((item,index)=>{
+        return index !== id
+      })
+    })
+  }
+
+  return (
+    <div>
+      
+      <Header />
+      <InputNote add={add} />
+
+      {lists.map((item,index)=>{
+        return  <Note id={index} key={index} del={handleDel} title={item.title} body={item.body}/>
+      })}
+
+      <Footer />
+    </div>
+  );
 }
-
-
